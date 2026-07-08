@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "llm-judge-bias"
+version = "0.1.0"
+description = "Measure position, verbosity, and assertiveness bias in an LLM-as-judge on controlled answer pairs — judge each pair in both orders and isolate what the verdict actually depends on"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Taimour Abdul Karim", email = "taimour.a.karim@gmail.com" }]
+keywords = ["llm-as-judge", "evaluation", "bias", "position-bias", "verbosity-bias", "claude", "bedrock"]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+real = ["anthropic[bedrock]>=0.39"]
+
+[project.scripts]
+llm-judge-bias = "judgebias.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/judgebias"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
