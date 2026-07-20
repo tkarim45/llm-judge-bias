@@ -1,6 +1,6 @@
 # llm-judge-bias
 
-**LLM-as-judge is the backbone of modern eval — and it has biases that inflate scores for reasons
+**LLM-as-judge is the backbone of modern eval, and it has biases that inflate scores for reasons
 that have nothing to do with quality.** This measures three of them (position, verbosity,
 assertiveness) on controlled answer pairs, by judging each pair in *both* orders so the bias is
 isolated from the correct verdict.
@@ -15,21 +15,21 @@ pytest -q                            # offline tests — no keys, no network
 
 ## The setup
 
-Each pair is engineered so a *fair* judge has an obvious, order-independent answer — any systematic
+Each pair is engineered so a *fair* judge has an obvious, order-independent answer, any systematic
 deviation is the bias:
 
-- **position** — one answer is genuinely correct, the other genuinely wrong. A fair judge always picks
+- **position**, one answer is genuinely correct, the other genuinely wrong. A fair judge always picks
   the correct one, in either slot. Preferring whichever answer is shown *first* is position bias.
-- **verbosity** — both answers are equally correct; one is concise, the other padded with true-but-
+- **verbosity**, both answers are equally correct; one is concise, the other padded with true-but-
   filler detail. A fair judge is indifferent. Preferring the longer one is verbosity bias.
-- **assertiveness** — both state the same correct facts; one is hedged ("I think it might be…"), the
+- **assertiveness**, both state the same correct facts; one is hedged ("I think it might be…"), the
   other confident. A fair judge scores them equal. Preferring the confident phrasing is style bias.
 
 Every pair is judged twice (each answer in each slot), so `first_slot_rate` measures position
 preference (0.50 = none) independently of `pick_worse_rate` (how often the judge chose the treatment:
 the wrong / longer / confident answer).
 
-## Results (real run — Claude Haiku 4.5 as judge on Bedrock)
+## Results (real run: Claude Haiku 4.5 as judge on Bedrock)
 
 | bias | pairs | pick_worse | first_slot | flip_rate | fair value |
 |---|---:|---:|---:|---:|---|
@@ -43,7 +43,7 @@ whichever answer was shown first (0.50 = no position preference).
 
 ## Findings
 
-- **No position bias — the "which is correct" judgment is rock-solid.** On pairs with a clear correct
+- **No position bias, the "which is correct" judgment is rock-solid.** On pairs with a clear correct
   answer, the judge picked the wrong one **0%** of the time, chose the first slot exactly 50% of the
   time, and *never* flipped its verdict when the order was swapped. When one answer is genuinely
   better, Claude-as-judge finds it regardless of position. The bias is not in *correctness*.
@@ -53,18 +53,18 @@ whichever answer was shown first (0.50 = no position preference).
 - **Assertiveness bias is total: 100% preference for confident phrasing.** When the same correct facts
   were stated hedged ("I think it might be Canberra…") vs confidently ("It is definitely Canberra"),
   the judge picked the confident version in **every single pair**, in both orders. The judge equates
-  confidence with correctness — even when the confident and hedged answers say exactly the same thing.
+  confidence with correctness, even when the confident and hedged answers say exactly the same thing.
 - **The practical consequence: LLM-as-judge scores are gameable.** A model being evaluated can lift
   its judge score by being longer and more assertive, with zero improvement in substance. Any
-  eval, leaderboard, or RLAIF signal built on a naked LLM judge is measuring style as well as quality —
+  eval, leaderboard, or RLAIF signal built on a naked LLM judge is measuring style as well as quality, 
   which is why a serious judge needs order-swapping, length controls, and
   [calibration against human labels](https://github.com/tkarim45/llm-as-judge-system) before you trust
   its numbers.
 
 > ⚠️ Scope: small controlled sets (12 position / 10 verbosity / 10 assertiveness pairs), one judge
 > model, hand-authored pairs each designed to isolate one bias. The effects are large and clean, but
-> the exact rates are directional — a different model, prompt, or scoring format (pointwise 1–10 vs
-> pairwise A/B) will shift the magnitudes. The *shape* — robust on correctness, biased on style — is
+> the exact rates are directional, a different model, prompt, or scoring format (pointwise 1 to 10 vs
+> pairwise A/B) will shift the magnitudes. The *shape*, robust on correctness, biased on style, is
 > the reproducible result and matches the published LLM-judge-bias literature.
 
 ## How it works
@@ -78,7 +78,7 @@ src/judgebias/
 ```
 
 The offline path uses a fake judge with a *known* injected bias (always-first, or always-longer), and
-the tests assert the metrics recover it — so CI verifies the bias arithmetic with no keys and no
+the tests assert the metrics recover it, so CI verifies the bias arithmetic with no keys and no
 network.
 
 ## License
