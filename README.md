@@ -13,6 +13,13 @@ llm-judge-bias --offline             # deterministic biased fake judge, no keys
 pytest -q                            # offline tests — no keys, no network
 ```
 
+
+## Architecture
+
+![architecture](docs/assets/architecture.png)
+
+*Interactive/exportable version: [`docs/assets/architecture.html`](docs/assets/architecture.html).*
+
 ## The setup
 
 Each pair is engineered so a *fair* judge has an obvious, order-independent answer, any systematic
